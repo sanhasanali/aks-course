@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  dockerRegistryServiceConnection: 'acr-connection'   # Ganti dengan nama ACR service connection kamu
+  imageRepository: 'aks-course'
+  containerRegistry: 'namakamuacr.azurecr.io'         # Ganti dengan nama ACR kamu
+  dockerfilePath: 'src/MyWebApp/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Docker@2
+  displayName: Build and Push Docker Image
+  inputs:
+    command: buildAndPush
+    containerRegistry: $(dockerRegistryServiceConnection)
+    repository: $(imageRepository)
+    dockerfile: $(dockerfilePath)
+    tags: |
+      $(tag)
